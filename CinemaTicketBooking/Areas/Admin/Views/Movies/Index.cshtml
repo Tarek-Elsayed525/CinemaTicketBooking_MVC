@@ -1,0 +1,170 @@
+﻿@model IEnumerable<CinemaTicketBooking.Models.Movie>
+
+@{
+    ViewData["Title"] = "All Movies";
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<div class="container-fluid px-4 py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1 fs-4">All Movies</h2>
+            <p class="text-muted fs-7 mb-0">إدارة وتصفح جميع الأفلام المعروضة في دور السينما باحترافية</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success px-3 py-2 rounded-pill fw-semibold shadow-sm text-white fs-7">
+            <i class="fas fa-plus me-1"></i> Create New Movie
+        </a>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white w-100 mb-4">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 table-hover w-100">
+                <thead class="table-light text-secondary text-uppercase fs-8 fw-bold border-bottom">
+                    <tr>
+                        <th class="py-3 px-4" style="width: 5%;">#</th>
+                        <th class="py-3" style="width: 15%;">Poster</th>
+                        <th class="py-3" style="width: 25%;">Movie Name</th>
+                        <th class="py-3" style="width: 15%;">Category</th>
+                        <th class="py-3" style="width: 15%;">Cinema</th>
+                        <th class="py-3" style="width: 10%;">Price</th>
+                        <th class="py-3 text-center" style="width: 15%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int counter = (currentPage - 1) * 5 + 1;
+                        foreach (var movie in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-semibold text-muted fs-7">@counter</td>
+                                <td>
+                                    <div class="rounded-3 overflow-hidden border shadow-sm" style="width: 50px; height: 70px;">
+                                        <img src="@Url.Content("~/moviesImages/" + System.IO.Path.GetFileName(movie.MainImage))" 
+                                             alt="@movie.Name" 
+                                             class="w-100 h-100" 
+                                             style="object-fit: cover;" 
+                                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400?text=Movie';" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold text-dark fs-7">@movie.Name</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-primary border px-2.5 py-1 rounded-pill fs-8">
+                                        @(movie.Category != null ? movie.Category.Name : "N/A")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-secondary fs-7 fw-semibold">
+                                        @(movie.Cinema != null ? movie.Cinema.Name : "N/A")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-success fw-bold fs-7">@movie.Price.ToString("C")</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <!-- Edit Button -->
+                                        <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-warning btn-sm text-white px-2.5 py-1 rounded-pill fw-semibold shadow-sm fs-8">
+                                            <i class="fas fa-edit me-1"></i> Edit
+                                        </a>
+                                        
+                                        <!-- Delete Button with Form -->
+                                        <form asp-action="Delete" asp-route-id="@movie.Id" method="post" class="d-inline delete-form">
+                                            <button type="button" class="btn btn-danger btn-sm px-2.5 py-1 rounded-pill fw-semibold shadow-sm fs-8 delete-btn">
+                                                <i class="fas fa-trash-alt me-1"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted fs-7">
+                                <i class="fas fa-film fa-2x mb-2 d-block"></i>
+                                No movies found. Click "Create New Movie" to add one!
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Centered & Enhanced Pagination Footer -->
+        @if (totalPages > 1)
+        {
+            <div class="card-footer bg-white border-0 py-4 text-center">
+                <nav aria-label="Page navigation" class="d-flex justify-content-center align-items-center flex-column gap-2">
+                    <ul class="pagination pagination-md mb-0 shadow-sm rounded-pill p-1 bg-light border">
+                        <!-- Previous Button -->
+                        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                            <a class="page-link rounded-pill px-3 fw-bold border-0" asp-action="Index" asp-route-page="@(currentPage - 1)">
+                                <i class="fas fa-chevron-left me-1"></i> Previous
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(currentPage == i ? "active" : "")">
+                                <a class="page-link rounded-circle mx-1 fw-bold border-0 @(currentPage == i ? "bg-primary text-white shadow-sm" : "text-dark")" 
+                                   style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;"
+                                   asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+
+                        <!-- Next Button -->
+                        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                            <a class="page-link rounded-pill px-3 fw-bold border-0" asp-action="Index" asp-route-page="@(currentPage + 1)">
+                                Next <i class="fas fa-chevron-right ms-1"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Page Counter Text -->
+                    <span class="text-muted fs-7 fw-semibold mt-1">
+                        Page <span class="badge bg-secondary">@currentPage</span> of <span class="badge bg-secondary">@totalPages</span>
+                    </span>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

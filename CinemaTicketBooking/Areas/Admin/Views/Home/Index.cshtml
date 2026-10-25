@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "لوحة التحكم الرئيسية";
+}
+
+<style>
+    .dashboard-card {
+        border: none;
+        border-radius: 20px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.18) !important;
+    }
+    .card-icon {
+        font-size: 4rem;
+        opacity: 0.35;
+    }
+</style>
+
+<div class="container-fluid px-4 py-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">📊 لوحة التحكم (Dashboard)</h2>
+            <p class="text-muted fs-6 mb-0">مرحباً بك مجدداً في لوحة إدارة نظام حجز تذاكر السينما</p>
+        </div>
+    </div>
+
+    <!-- Stat Cards Row (كل اتنين تحت بعض بحجم كبير وأوضح) -->
+    <div class="row g-4 my-2">
+        <!-- Cinemas Card -->
+        <div class="col-md-6">
+            <div class="card dashboard-card shadow-sm bg-primary text-white h-100 p-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-uppercase fw-semibold mb-2 d-block opacity-75 fs-6">إجمالي السينمات</span>
+                            <h1 class="fw-bold display-4 mb-0">@ViewBag.CinemasCount</h1>
+                        </div>
+                        <div class="card-icon"><i class="fas fa-video"></i></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between px-4 pb-3 pt-0">
+                    <a asp-controller="Cinemas" asp-action="Index" class="small text-white text-decoration-none stretched-link fw-bold fs-5">
+                        إدارة السينمات <i class="fas fa-arrow-left ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movies Card -->
+        <div class="col-md-6">
+            <div class="card dashboard-card shadow-sm bg-success text-white h-100 p-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-uppercase fw-semibold mb-2 d-block opacity-75 fs-6">إجمالي الأفلام</span>
+                            <h1 class="fw-bold display-4 mb-0">@ViewBag.MoviesCount</h1>
+                        </div>
+                        <div class="card-icon"><i class="fas fa-film"></i></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between px-4 pb-3 pt-0">
+                    <a asp-controller="Movies" asp-action="Index" class="small text-white text-decoration-none stretched-link fw-bold fs-5">
+                        إدارة الأفلام <i class="fas fa-arrow-left ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Card -->
+        <div class="col-md-6">
+            <div class="card dashboard-card shadow-sm bg-warning text-white h-100 p-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-uppercase fw-semibold mb-2 d-block opacity-75 fs-6">التصنيفات</span>
+                            <h1 class="fw-bold display-4 mb-0">@ViewBag.CategoriesCount</h1>
+                        </div>
+                        <div class="card-icon"><i class="fas fa-tags"></i></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between px-4 pb-3 pt-0">
+                    <a asp-controller="Categories" asp-action="Index" class="small text-white text-decoration-none stretched-link fw-bold fs-5">
+                        إدارة التصنيفات <i class="fas fa-arrow-left ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actors Card -->
+        <div class="col-md-6">
+            <div class="card dashboard-card shadow-sm bg-danger text-white h-100 p-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-uppercase fw-semibold mb-2 d-block opacity-75 fs-6">الممثلين</span>
+                            <h1 class="fw-bold display-4 mb-0">@ViewBag.ActorsCount</h1>
+                        </div>
+                        <div class="card-icon"><i class="fas fa-users"></i></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between px-4 pb-3 pt-0">
+                    <a asp-controller="Actors" asp-action="Index" class="small text-white text-decoration-none stretched-link fw-bold fs-5">
+                        إدارة الممثلين <i class="fas fa-arrow-left ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

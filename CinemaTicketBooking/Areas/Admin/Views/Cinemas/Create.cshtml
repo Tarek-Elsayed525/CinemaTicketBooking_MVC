@@ -1,0 +1,96 @@
+﻿@model CinemaTicketBooking.Models.Cinema
+
+@{
+    ViewData["Title"] = "Create Cinema";
+}
+
+<div class="container-fluid px-5 py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">Create New Cinema</h2>
+            <p class="text-muted fs-6 mb-0">إضافة دور سينما جديدة إلى النظام باحترافية</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm">
+            <i class="fas fa-arrow-right me-2"></i> Back to List
+        </a>
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <!-- Form Card (عرض واسع ومريح) -->
+    <div class="row">
+        <div class="col-lg-10 col-xl-9">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Cinema Name Field -->
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-bold text-dark" style="font-size: 0.95rem;">Cinema Name</label>
+                        <input asp-for="Name" class="form-control form-control-lg rounded-3 shadow-none" style="font-size: 0.9rem;" placeholder="Enter cinema name..." />
+                        <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold text-dark" style="font-size: 0.95rem;">Description</label>
+                        <textarea asp-for="Description" class="form-control rounded-3 shadow-none" style="font-size: 0.9rem;" rows="4" placeholder="Enter cinema description..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Image Upload Field with Preview Box -->
+                    <div class="mb-4">
+                        <label for="image" class="form-label fw-bold text-dark" style="font-size: 0.95rem;">Cinema Image</label>
+                        <input type="file" name="image" id="imageInput" class="form-control form-control-lg rounded-3 shadow-none mb-3" style="font-size: 0.9rem;" accept="image/*" onchange="previewImage(event)" />
+
+                        <!-- Image Preview Box (مربع معاينة الصورة) -->
+                        <div id="imagePreviewContainer" class="d-none border rounded-3 p-2 bg-light text-center" style="width: 150px; height: 150px; overflow: hidden; position: relative;">
+                            <img id="outputImage" class="w-100 h-100 rounded-2" style="object-fit: cover;" />
+                        </div>
+
+                        <span class="text-muted small mt-1 d-block">قم باختيار صورة معبرة لدور السينما (PNG, JPG)</span>
+                    </div>
+
+                    <!-- Submit & Cancel Buttons -->
+                    <div class="d-flex gap-2 pt-2">
+                        <button type="submit" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow-sm" style="font-size: 0.95rem;">
+                            <i class="fas fa-save me-2"></i> Create
+                        </button>
+                        <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill fw-semibold text-secondary" style="font-size: 0.95rem;">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- JavaScript لجعل الصورة تظهر في مربع المعاينة فور اختيارها -->
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            var outputImage = document.getElementById('outputImage');
+
+            reader.onload = function () {
+                outputImage.src = reader.result;
+                imagePreviewContainer.classList.remove('d-none'); // إظهار المربع عند اختيار الصورة
+            }
+
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+    </script>
+}

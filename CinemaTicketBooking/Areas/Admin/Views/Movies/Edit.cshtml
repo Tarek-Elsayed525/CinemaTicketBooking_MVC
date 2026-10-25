@@ -1,0 +1,127 @@
+﻿@model CinemaTicketBooking.View_Model.MovieFormVM
+
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<div class="container shadow p-4 rounded bg-white mt-4">
+    <h2 class="text-center text-primary mb-4">Edit Movie: @Model.Name</h2>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <!-- Left Column: Basic Inputs -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label fw-bold"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ReleaseDate" class="form-label fw-bold"></label>
+                    <input asp-for="ReleaseDate" class="form-control" type="date" />
+                    <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input asp-for="Status" class="form-check-input" />
+                    <label asp-for="Status" class="form-check-label fw-bold"></label>
+                </div>
+            </div>
+
+            <!-- Right Column: Dropdowns & Images -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="CategoryId" class="form-label fw-bold">Category</label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CinemaId" class="form-label fw-bold">Cinema</label>
+                    <select asp-for="CinemaId" asp-items="Model.Cinemas" class="form-select">
+                        <option value="">-- Select Cinema --</option>
+                    </select>
+                    <span asp-validation-for="CinemaId" class="text-danger"></span>
+                </div>
+                <!-- Main Image Preview & Upload -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Main Image</label>
+                    <div class="mb-2">
+                        @if (!string.IsNullOrEmpty(Model.ExistingMainImage))
+                        {
+                            <div class="position-relative d-inline-block">
+                                <img src="~/moviesImages/@Model.ExistingMainImage" class="rounded shadow-sm" style="width: 100px; height: 100px; object-fit: cover;" />
+
+                                <!-- حقل خفي لحفظ اسم الصورة القديمة وإرسالها مع الـ Post -->
+                                <input type="hidden" asp-for="ExistingMainImage" />
+                            </div>
+                        }
+                    </div>
+                    <input asp-for="MainImage" class="form-control" type="file" />
+                    <span asp-validation-for="MainImage" class="text-danger"></span>
+                </div>
+
+                <!-- Sub Images Preview & Upload with Keep Checkboxes -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Sub Images</label>
+                    <div class="d-flex flex-wrap gap-3 mb-2">
+                        @if (Model.ExistingSubImages != null && Model.ExistingSubImages.Any())
+                        {
+                            foreach (var subImg in Model.ExistingSubImages)
+                            {
+                                <div class="position-relative border rounded p-1 bg-light text-center" style="width: 90px;">
+                                    <img src="~/MoviesSubImages/@subImg.SubImage" class="rounded mb-1" style="width: 80px; height: 80px; object-fit: cover;" />
+
+                                    <!-- Checkbox للحفاظ على الصورة أو إزالتها عند الحفظ -->
+                                    <div class="form-check d-flex justify-content-center p-0 m-0">
+                                        <input type="checkbox" name="ExistingSubImageIds" value="@subImg.Id" checked class="form-check-input" id="subImg_@subImg.Id" />
+                                        <label class="form-check-label small ms-1" for="subImg_@subImg.Id">Keep</label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <input asp-for="SubImages" class="form-control" type="file" multiple />
+                    <span asp-validation-for="SubImages" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actors Selection -->
+        <div class="mb-3">
+            <label asp-for="SelectedActorIds" class="form-label fw-bold">Actors</label>
+            <select asp-for="SelectedActorIds" asp-items="Model.Actors" class="form-select" multiple style="height: 150px;">
+            </select>
+            <span asp-validation-for="SelectedActorIds" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success px-5 py-2 fw-bold">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary px-4 py-2 ms-2">Back to List</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

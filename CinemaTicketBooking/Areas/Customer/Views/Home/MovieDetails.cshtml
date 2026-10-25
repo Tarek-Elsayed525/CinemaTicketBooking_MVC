@@ -1,0 +1,144 @@
+﻿@model CinemaTicketBooking.Models.Movie
+
+@{
+    ViewData["Title"] = Model?.Name ?? "تفاصيل الفيلم";
+}
+
+<style>
+    .movie-detail-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .movie-poster-img {
+        width: 100%;
+        max-height: 480px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .actor-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: none;
+        border-radius: 16px;
+        background: #f8fafc;
+    }
+
+    .actor-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .actor-img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+</style>
+
+<!-- زر العودة -->
+<div class="mb-4 pt-3">
+    <a asp-action="CinemaMovies" asp-route-id="@Model?.CinemaId" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="fas fa-arrow-right me-1"></i> العودة لأفلام السينما
+    </a>
+</div>
+
+@if (Model != null)
+{
+    <!-- Main Movie Details Section -->
+    <div class="card movie-detail-card shadow-sm p-4 mb-5">
+        <div class="row g-4 align-items-center">
+            <!-- Movie Poster -->
+            <div class="col-lg-4 text-center">
+                <img src="@Url.Content("~/moviesImages/" + System.IO.Path.GetFileName(Model.MainImage))" 
+                     class="movie-poster-img shadow" 
+                     alt="@Model.Name" 
+                     onerror="this.onerror=null; this.src='https://via.placeholder.com/400x550?text=Movie+Poster';" />
+            </div>
+
+            <!-- Movie Info -->
+            <div class="col-lg-8">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    @if (Model.Category != null)
+                    {
+                        <span class="badge bg-primary px-3 py-2 rounded-pill fs-6">🏷️ @Model.Category.Name</span>
+                    }
+                    @if (Model.Cinema != null)
+                    {
+                        <span class="badge bg-dark px-3 py-2 rounded-pill fs-6">📍 @Model.Cinema.Name</span>
+                    }
+                    <span class="badge bg-success px-3 py-2 rounded-pill fs-6">💰 @Model.Price.ToString("C")</span>
+                </div>
+
+                <h1 class="fw-bold text-dark mb-3">@Model.Name</h1>
+
+                <p class="text-muted fs-6 mb-4" style="line-height: 1.8;">
+                    @Model.Description
+                </p>
+
+                <div class="row g-3 mb-4 p-3 rounded-3 bg-light">
+                    <div class="col-sm-6">
+                        <span class="text-muted small d-block">تاريخ العرض:</span>
+                        <strong class="text-dark">📅 @Model.ReleaseDate.ToString("dd MMMM yyyy")</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-muted small d-block">حالة العرض:</span>
+                        @if (Model.Status)
+                        {
+                            <span class="text-success fw-bold">🟢 يعرض حالياً</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger fw-bold">🔴 قريباً</span>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm fw-bold">
+                        <i class="fas fa-ticket-alt me-2"></i> احجز تذكرتك الآن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cast / Actors Section -->
+    <div class="mb-5">
+        <h3 class="fw-bold text-dark mb-4 border-bottom pb-2">🎭 طاقم التمثيل والبطولة</h3>
+
+        @if (Model.MovieActors != null && Model.MovieActors.Any())
+        {
+            <div class="row g-4">
+                @foreach (var movieActor in Model.MovieActors)
+                {
+                    @if (movieActor.Actor != null)
+                    {
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card actor-card text-center p-4 h-100 shadow-sm">
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <img src="@Url.Content("~/ActorImages/" + System.IO.Path.GetFileName(movieActor.Actor.Image))" 
+                                         class="actor-img" 
+                                         alt="@movieActor.Actor.Name" 
+                                         onerror="this.onerror=null; this.src='https://via.placeholder.com/130x130?text=Actor';" />
+                                </div>
+                                <h5 class="fw-bold text-dark mb-0 fs-6">@movieActor.Actor.Name</h5>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-light text-muted border rounded-3 p-3">
+                لم يتم إضافة طاقم التمثيل لهذا الفيلم بعد.
+            </div>
+        }
+    </div>
+}

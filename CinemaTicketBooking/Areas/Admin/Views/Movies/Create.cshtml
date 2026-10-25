@@ -1,0 +1,172 @@
+﻿@model CinemaTicketBooking.View_Model.MovieFormVM
+
+@{
+    ViewData["Title"] = "Create Movie";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Create Movie</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-action="Index">Movies</a></li>
+        <li class="breadcrumb-item active">Create</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-film me-1"></i>
+            Movie Details
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <!-- Movie Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label fw-bold"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter movie name..." />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Price" class="form-label fw-bold"></label>
+                        <input asp-for="Price" class="form-control" placeholder="Enter price..." />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Category -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="CategoryId" class="form-label fw-bold">Category</label>
+                        <select asp-for="CategoryId" class="form-select" asp-items="Model.Categories">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Cinema -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="CinemaId" class="form-label fw-bold">Cinema</label>
+                        <select asp-for="CinemaId" class="form-select" asp-items="Model.Cinemas">
+                            <option value="">-- Select Cinema --</option>
+                        </select>
+                        <span asp-validation-for="CinemaId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Release Date -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ReleaseDate" class="form-label fw-bold"></label>
+                        <input asp-for="ReleaseDate" type="date" class="form-control" />
+                        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Main Image with Preview -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="MainImage" class="form-label fw-bold">Main Image</label>
+                        <input asp-for="MainImage" type="file" class="form-control" id="mainImageInput" accept="image/*" />
+                        <span asp-validation-for="MainImage" class="text-danger"></span>
+                        
+                        <!-- مكان معاينة الصورة الرئيسية -->
+                        <div class="mt-2">
+                            <img id="mainImagePreview" src="#" alt="Main Image Preview" class="rounded shadow-sm d-none" style="width: 100px; height: 100px; object-fit: cover;" />
+                        </div>
+                    </div>
+
+                    <!-- Sub Images with Preview -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SubImages" class="form-label fw-bold">Sub Images</label>
+                        <input asp-for="SubImages" type="file" class="form-control" id="subImagesInput" multiple accept="image/*" />
+                        <span asp-validation-for="SubImages" class="text-danger"></span>
+                        
+                        <!-- مكان معاينة الصور الفرعية -->
+                        <div id="subImagesPreviewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Actors Select -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SelectedActorIds" class="form-label fw-bold">Actors</label>
+                        <select asp-for="SelectedActorIds" class="form-select" asp-items="Model.Actors" multiple size="4">
+                        </select>
+                        <small class="text-muted">Hold Ctrl to select multiple actors.</small>
+                        <span asp-validation-for="SelectedActorIds" class="text-danger"></span>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6 mb-3 d-flex align-items-center">
+                        <div class="form-check form-switch mt-4">
+                            <input class="form-check-input" type="checkbox" asp-for="Status" id="statusSwitch" />
+                            <label class="form-check-label fw-bold" for="statusSwitch">Is Available</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter description..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save me-1"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // معاينة الصورة الرئيسية
+        document.getElementById('mainImageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('mainImagePreview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('d-none');
+            } else {
+                preview.src = '#';
+                preview.classList.add('d-none');
+            }
+        });
+
+        // معاينة الصور الفرعية المتعددة
+        document.getElementById('subImagesInput').addEventListener('change', function (event) {
+            const files = event.target.files;
+            const container = document.getElementById('subImagesPreviewContainer');
+            container.innerHTML = ''; // تفريغ الحاكمة قبل عرض الصور الجديدة
+
+            if (files) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'rounded shadow-sm';
+                        img.style.width = '80px';
+                        img.style.height = '80px';
+                        img.style.objectFit = 'cover';
+                        container.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+    </script>
+}

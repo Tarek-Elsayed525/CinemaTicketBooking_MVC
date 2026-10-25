@@ -1,0 +1,108 @@
+﻿
+    @model CinemaTicketBooking.Models.Actor
+
+    @{
+        ViewData["Title"] = "Edit Actor";
+    }
+
+    <div class="container-fluid px-4 py-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1 fs-4">Edit Actor</h2>
+                <p class="text-muted fs-7 mb-0">تعديل بيانات وصورة الممثل في النظام</p>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-secondary px-3 py-2 rounded-pill fw-semibold fs-7">
+                <i class="fas fa-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+                    <div class="card-body p-4">
+                        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fs-7"></div>
+
+                            <!-- Hidden Field for ID -->
+                            <input type="hidden" asp-for="Id" />
+                            <!-- Hidden Field for existing Image Name -->
+                            <input type="hidden" asp-for="Image" />
+
+                            <div class="row g-4">
+                                <!-- Name Field -->
+                                <div class="col-12">
+                                    <label asp-for="Name" class="form-label fw-semibold text-secondary fs-7">Actor Name</label>
+                                    <input asp-for="Name" class="form-control rounded-3 py-2 fs-7" placeholder="Enter actor full name..." />
+                                    <span asp-validation-for="Name" class="text-danger fs-8"></span>
+                                </div>
+
+                                <!-- Description Field -->
+                                <div class="col-12">
+                                    <label asp-for="Description" class="form-label fw-semibold text-secondary fs-7">Description</label>
+                                    <textarea asp-for="Description" class="form-control rounded-3 py-2 fs-7" rows="4" placeholder="Enter biography or brief description..."></textarea>
+                                    <span asp-validation-for="Description" class="text-danger fs-8"></span>
+                                </div>
+
+                                <!-- Image Upload & Existing Image Display -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold text-secondary fs-7">Actor Image</label>
+                                    <input type="file" name="image" id="imageInput" class="form-control rounded-3 py-2 fs-7" accept="image/*" />
+                                    <small class="text-muted fs-8 mt-1 d-block">اترك هذا الحقل فارغاً إذا كنت لا تريد تغيير الصورة الحالية.</small>
+
+                                    <!-- Existing / Preview Image Container -->
+                                    <div class="mt-3 text-center">
+                                        <div class="d-inline-block rounded-circle overflow-hidden border shadow-sm" style="width: 100px; height: 100px;">
+                                            @if (!string.IsNullOrEmpty(Model.Image))
+                                            {
+                                                <img id="imagePreview" src="~/ActorImages/@Model.Image" alt="@Model.Name" class="w-100 h-100" style="object-fit: cover;" />
+                                            }
+                                            else
+                                            {
+                                                <img id="imagePreview" src="~/assets/img/icons/spot-illustrations/falcon.png" alt="Preview" class="w-100 h-100" style="object-fit: cover; display: none;" />
+                                                <div id="previewPlaceholder" class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user text-secondary fs-3"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="col-12 text-end pt-2">
+                                    <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill fw-semibold me-2 fs-7">Cancel</a>
+                                    <button type="submit" class="btn btn-warning px-4 py-2 rounded-pill fw-semibold shadow-sm text-white fs-7">
+                                        <i class="fas fa-save me-1"></i> Update Actor
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+
+        <script>
+                // Image Preview Handler for Edit
+                document.getElementById('imageInput').addEventListener('change', function (event) {
+                    const [file] = event.target.files;
+                    const preview = document.getElementById('imagePreview');
+                    const placeholder = document.getElementById('previewPlaceholder');
+
+                    if (file) {
+                        preview.src = URL.createObjectURL(file);
+                        preview.style.display = 'block';
+                        if (placeholder) {
+                            placeholder.style.display = 'none';
+                        }
+                    }
+                });
+        </script>
+    }
