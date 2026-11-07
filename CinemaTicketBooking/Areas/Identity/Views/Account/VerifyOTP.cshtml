@@ -1,0 +1,51 @@
+﻿@model CinemaTicketBooking.View_Model.VerifyOTPVM
+
+@{
+    ViewData["Title"] = "Verify OTP";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg border-0 rounded-4 p-4 text-center" style="width: 100%; max-width: 450px; background: #ffffff;">
+
+        <!-- Header Section -->
+        <div class="mb-4">
+            <div class="mb-3">
+                <span class="p-3 bg-light text-primary rounded-circle" style="font-size: 24px;">🔒</span>
+            </div>
+            <h3 class="fw-bold text-dark">Enter Verification Code</h3>
+            <p class="text-muted" style="font-size: 14px;">We've sent a 4-digit code to your email. Please enter it below.</p>
+        </div>
+
+        <!-- Form Section -->
+        <form asp-action="VerifyOTP" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size: 13px;"></div>
+            <input asp-for="UserId" hidden />
+            <!-- OTP Input Field (Supports 4-digit binding) -->
+            <div class="mb-4">
+                <input asp-for="OTPCode" class="form-control text-center fw-bold rounded-3 py-3"
+                       placeholder="----" maxlength="4"
+                       style="letter-spacing: 12px; font-size: 24px; border: 2px solid #ced4da;" />
+                <span asp-validation-for="OTPCode" class="text-danger" style="font-size: 12px; display: block; margin-top: 5px;"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn w-100 py-3 text-white fw-bold rounded-3 shadow-sm" style="background: linear-gradient(135deg, #0d6efd, #0b5ed7); transition: background 0.2s;">
+                Verify Code
+            </button>
+
+            <!-- Resend Link -->
+            <div class="text-center mt-3">
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Didn't receive the code? <a asp-action="ForgetPassword" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Resend</a></p>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <partial name="_NotificationPartial" />
+}

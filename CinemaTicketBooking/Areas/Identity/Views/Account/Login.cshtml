@@ -1,0 +1,68 @@
+﻿@model CinemaTicketBooking.View_Model.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div style="min-height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #f8fafc; padding: 40px 0; direction: ltr; text-align: left;">
+    <div style="width: 100%; max-width: 450px; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0;">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #0d6efd, #0b5ed7); color: #fff; padding: 30px; text-align: center;">
+            <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: bold;">🎬 Welcome Back</h3>
+            <p style="margin: 0; color: #e9ecef; font-size: 14px;">Sign in to continue booking your favorite movies</p>
+        </div>
+
+        <!-- Form Body -->
+        <div style="padding: 35px;">
+            <form asp-action="Login" method="post" novalidate>
+                
+                <div asp-validation-summary="ModelOnly" style="color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;"></div>
+
+                <!-- UserName or Email -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="UserNameorEmail" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;">Username or Email</label>
+                    <input asp-for="UserNameorEmail" placeholder="Enter username or email" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="UserNameorEmail" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Password -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="Password" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="Password" placeholder="••••••••" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="Password" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                    <input asp-for="RememberMe" style="width: 18px; height: 18px; accent-color: #0d6efd; cursor: pointer; margin-right: 8px;" />
+                    <label asp-for="RememberMe" style="color: #334155; font-size: 14px; font-weight: 500; cursor: pointer; margin: 0;">Remember me</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0d6efd, #0b5ed7); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s;">
+                    Login
+                </button>
+
+                <!-- Footer Link -->
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 0; color: #64748b; font-size: 14px;">Don't have an account? <a asp-action="Register" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Register</a></p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 0; color: #64748b; font-size: 14px;">Don't have an account? <a asp-action="ResendEmailConfirmation" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Resend Email Confirmation</a></p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 0; color: #64748b; font-size: 14px;">Don't have an account? <a asp-action="ForgetPassword" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Forget Password</a></p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+<partial name="_NotificationPartial" />
+    }
+}

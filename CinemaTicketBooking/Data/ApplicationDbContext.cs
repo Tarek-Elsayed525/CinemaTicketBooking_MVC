@@ -1,6 +1,8 @@
-﻿namespace CinemaTicketBooking.Data
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace CinemaTicketBooking.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -15,6 +17,7 @@
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieActor> MovieActors { get; set; }
         public DbSet<MovieSubImage> MovieSubImages { get; set; }
+        public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
 
 
 

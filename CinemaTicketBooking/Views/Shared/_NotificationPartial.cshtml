@@ -1,0 +1,13 @@
+﻿@if (TempData["Successful_Notification"] != null)
+{
+    <script type="text/javascript">
+        toastr.success('@TempData["Successful_Notification"]');
+    </script>
+}
+
+@if (TempData["Error_Notification"] != null)
+{
+    <script type="text/javascript">
+        toastr.error('@TempData["Error_Notification"]');
+    </script>
+}

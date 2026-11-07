@@ -1,3 +1,6 @@
+using CinemaTicketBooking.Utitlites;
+using Microsoft.AspNetCore.Identity;
+
 namespace CinemaTicketBooking
 {
     public class Program
@@ -22,6 +25,21 @@ namespace CinemaTicketBooking
             builder.Services.AddScoped<IReposetory<Category>, Reposetory<Category>>();
             builder.Services.AddScoped<IReposetory<MovieActor>, Reposetory<MovieActor>>();
             builder.Services.AddScoped<IReposetory<MovieSubImage>, Reposetory<MovieSubImage>>();
+            builder.Services.AddScoped<IReposetory<ApplicationUserOTP>, Reposetory<ApplicationUserOTP>>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.User.RequireUniqueEmail = true;
+                option.Lockout.MaxFailedAccessAttempts = 4;
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                option.SignIn.RequireConfirmedEmail = true;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+
 
             var app = builder.Build();
 
@@ -42,9 +60,10 @@ namespace CinemaTicketBooking
             app.MapStaticAssets();
 
 
+
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
+                pattern: "{area=Identity}/{controller=Account}/{action=Register}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

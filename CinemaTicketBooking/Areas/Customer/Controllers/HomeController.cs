@@ -18,7 +18,7 @@ namespace CinemaTicketBooking.Areas.Customer.Controllers
             _Context = context;
         }
 
-        public async Task<IActionResult> IndexAsync(int page = 1)
+        public async Task<IActionResult> Index(int page = 1)
         {
             int pagesize = 6;
             int totalMovies = _cinemaReposetory.Query().Count();
@@ -40,7 +40,7 @@ namespace CinemaTicketBooking.Areas.Customer.Controllers
 
             return View(cinemas);
         }
-        public async Task<IActionResult> CinemaMoviesAsync(int id, int page = 1)
+        public async Task<IActionResult> CinemaMovies(int id, int page = 1)
         {
             int pagesize = 6;
             int totalMovies = _movieReposetory.Query().Count(m => m.CinemaId == id);

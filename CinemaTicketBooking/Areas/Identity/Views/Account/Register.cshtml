@@ -1,0 +1,84 @@
+﻿@model CinemaTicketBooking.View_Model.RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div style="min-height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #f8fafc; padding: 40px 0; direction: ltr; text-align: left;">
+    <div style="width: 100%; max-width: 500px; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0;">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #0d6efd, #0b5ed7); color: #fff; padding: 30px; text-align: center;">
+            <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: bold;">🎬 Register</h3>
+            <p style="margin: 0; color: #e9ecef; font-size: 14px;">Create a new account to start booking your favorite movies</p>
+        </div>
+       
+        <!-- Form Body -->
+        <div style="padding: 35px;">
+           <form asp-area="Identity" asp-controller="Account" asp-action="Register" method="post" novalidate>
+                
+                <div asp-validation-summary="ModelOnly" style="color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;"></div>
+
+                <!-- Name -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="Name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="Name" placeholder="Enter your full name" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="Name" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+               
+
+                <!-- UserName -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="UserName" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="UserName" placeholder="Enter username" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="UserName" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                 <!-- Address -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="Address" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="Address" placeholder="Enter your address" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="Address" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Email -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="Email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="Email" placeholder="name@example.com" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="Email" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Password -->
+                <div style="margin-bottom: 20px;">
+                    <label asp-for="Password" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="Password" placeholder="••••••••" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="Password" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div style="margin-bottom: 25px;">
+                    <label asp-for="ConfirmPassword" style="display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px;"></label>
+                    <input asp-for="ConfirmPassword" placeholder="••••••••" style="width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; background-color: #f8fafc; box-sizing: border-box;" />
+                    <span asp-validation-for="ConfirmPassword" style="color: #dc3545; font-size: 12px; display: block; margin-top: 5px;"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0d6efd, #0b5ed7); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s;">
+                    Register
+                </button>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 0; color: #64748b; font-size: 14px;">Already have an account? <a asp-action="Login" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Login</a></p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
