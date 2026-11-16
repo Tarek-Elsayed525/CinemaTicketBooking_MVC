@@ -63,7 +63,7 @@ namespace CinemaTicketBooking
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Identity}/{controller=Account}/{action=Register}/{id?}")
+                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
