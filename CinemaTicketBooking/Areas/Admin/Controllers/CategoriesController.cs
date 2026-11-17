@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 namespace CinemaTicketBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class CategoriesController : Controller
     {
         //readonly private ApplicationDbContext _Context = new ApplicationDbContext();

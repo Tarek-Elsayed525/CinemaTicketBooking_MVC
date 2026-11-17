@@ -1,11 +1,13 @@
+using CinemaTicketBooking.DBSeeding;
 using CinemaTicketBooking.Utitlites;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
 namespace CinemaTicketBooking
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,7 @@ namespace CinemaTicketBooking
             builder.Services.AddScoped<IReposetory<MovieSubImage>, Reposetory<MovieSubImage>>();
             builder.Services.AddScoped<IReposetory<ApplicationUserOTP>, Reposetory<ApplicationUserOTP>>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IDbInitializer, DBInitializer>();
 
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
@@ -41,7 +44,30 @@ namespace CinemaTicketBooking
 
 
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+
+                // Redirect paths
+                options.LoginPath = "/Identity/Account/Login";     // Where to redir
+
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Where to redir
+
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+            });
+
+
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                await dbInitializer.InitializeAsync();
+            }
+
+
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -63,7 +89,7 @@ namespace CinemaTicketBooking
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

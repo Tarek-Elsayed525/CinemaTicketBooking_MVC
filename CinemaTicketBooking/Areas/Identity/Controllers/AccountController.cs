@@ -1,4 +1,5 @@
-﻿using CinemaTicketBooking.View_Model;
+﻿using CinemaTicketBooking.DBSeeding;
+using CinemaTicketBooking.View_Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,7 +58,10 @@ namespace CinemaTicketBooking.Areas.Identity.Controllers
                 registerVM.Email,
                 "Confirm your email CINEMA",
                 $"<h1>Welcome to CINEMA!</h1><p>Please confirm your email address by clicking <a href='{Link}'>here</a>.</p>");
+            await _userManager.AddToRoleAsync(user, CD.CUSTOMER);
+
             TempData["Successful_Notification"] = "تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول!";
+
             return RedirectToAction("Login");
         }
         [HttpGet]
@@ -265,8 +269,19 @@ namespace CinemaTicketBooking.Areas.Identity.Controllers
             TempData["Successful_Notification"] = "تم إعادة تعيين كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة.";
             return RedirectToAction("Login");
         }
+        [HttpGet]
 
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            TempData["Successful_Notification"] = "تم تسجيل الخروج بنجاح.";
+            return RedirectToAction("Login", "Account", new { area = "Identity" });
+        }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
     }
 }
